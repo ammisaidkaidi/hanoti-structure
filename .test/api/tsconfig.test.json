@@ -1,0 +1,13 @@
+{
+  "extends": "../../hanoti/api/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "../..",
+    "noEmit": true
+  },
+  "include": [
+    "../../hanoti/api/index.ts",
+    "../../hanoti/api/common/**/*.ts",
+    "../../hanoti/api/erp/**/*.ts",
+    "./*.ts"
+  ]
+}

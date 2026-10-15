@@ -1,0 +1,36 @@
+{
+  "name": "@app/tests",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Centralized Hanouti tests, fixtures, offline SQL validation and local test artifacts",
+  "scripts": {
+    "test": "vitest run --config vitest.config.ts",
+    "test:api": "vitest run --config vitest.config.ts api",
+    "test:data": "vitest run --config vitest.config.ts data",
+    "test:common": "vitest run --config vitest.config.ts packages/common",
+    "test:server": "vitest run --config vitest.config.ts packages/server",
+    "typecheck": "tsc -p data/tsconfig.test.json && tsc -p api/tsconfig.test.json && tsc -p packages/common/tsconfig.test.json && tsc -p packages/server/tsconfig.test.json",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --config ../hanoti/.prettierrc.json --write .",
+    "format:check": "prettier --config ../hanoti/.prettierrc.json --check ."
+  },
+  "devDependencies": {
+    "@app/api": "workspace:*",
+    "@app/common": "workspace:*",
+    "@app/data": "workspace:*",
+    "@app/server": "workspace:*",
+    "@types/node": "^22.20.5",
+    "@types/supertest": "^6.0.3",
+    "eslint": "^10.12.0",
+    "pg": "8.23.1",
+    "prettier": "^3.6.2",
+    "supertest": "^7.1.4",
+    "typeorm": "1.1.2",
+    "typescript": "~5.9.3",
+    "vitest": "^3.2.7"
+  },
+  "engines": {
+    "node": "^20.19.0 || ^22.13.0 || >=24.11.0"
+  }
+}

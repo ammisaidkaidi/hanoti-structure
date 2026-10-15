@@ -1,0 +1,25 @@
+[Unit]
+Description=Hanouti PostgreSQL whole-database backup (hanouti)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+# Create this OS user and adapt paths before installing this unit.
+User=hanouti
+Group=hanouti
+WorkingDirectory=/opt/hanoti
+Environment=NODE_ENV=production
+# DATA_DIR=/data puts archives at the requested absolute /data/migrations path.
+Environment=DATA_DIR=/data
+EnvironmentFile=/etc/hanouti/backup.env
+ExecStart=/usr/bin/node /opt/hanoti/packages/server/dist/scripts/backup.js
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/data/migrations
+# One database: dump plus archive-list check (30 min/tool).
+TimeoutStartSec=90min
+KillMode=control-group

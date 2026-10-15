@@ -1,0 +1,15 @@
+  INSERT INTO auth.users(id,email,display_name,status) VALUES
+    (a,a||'@example.test','Editor A','active'),(b,b||'@example.test','Supervisor B','active');
+  INSERT INTO auth.roles(id,code,name) VALUES
+    (ar,'editor_'||replace(ar::text,'-',''),'Editor fixture'),(br,'supervisor_'||replace(br::text,'-',''),'Supervisor fixture');
+  INSERT INTO auth.user_roles(user_id,role_id) VALUES(a,ar),(b,br);
+  INSERT INTO auth.role_permissions(role_id,permission_id,effect,record_scope,change_reason)
+    SELECT ar,id,'allow','all','Editing fixture' FROM auth.permissions WHERE code IN
+      ('order.sales.read','order.sales.create_draft','order.sales.update_draft','order.purchase.read','order.purchase.create_draft','order.purchase.update_draft');
+  INSERT INTO auth.role_permissions(role_id,permission_id,effect,record_scope,change_reason)
+    SELECT br,id,'allow','all','Supervisor fixture' FROM auth.permissions WHERE code IN
+      ('order.sales.read','order.sales.update_draft','order.sales.force_close_edit','order.purchase.read','order.purchase.update_draft','order.purchase.force_close_edit');
+  INSERT INTO erp.customers(id,code,name) VALUES(customer,customer::text,'Guard test customer');
+  INSERT INTO erp.suppliers(id,code,name) VALUES(supplier,supplier::text,'Guard test supplier');
+  INSERT INTO erp.warehouses(id,code,name) VALUES(warehouse,warehouse::text,'Guard test warehouse');
+  INSERT INTO erp.products(id,sku,name,currency_code,sale_price) VALUES(product,product::text,'Guard test product','DZD',100);

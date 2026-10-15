@@ -1,0 +1,36 @@
+{
+  "name": "hanouti",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.34.7",
+  "engines": {
+    "node": "^20.19.0 || ^22.13.0 || >=24.11.0",
+    "pnpm": ">=10 <11"
+  },
+  "scripts": {
+    "predev": "pnpm --filter @app/common build && pnpm --filter @app/data build",
+    "dev": "concurrently --kill-others --names common,data,server,browser --prefix-colors cyan,magenta,yellow,green \"pnpm --filter @app/common dev\" \"pnpm --filter @app/data dev\" \"pnpm --filter @app/server dev\" \"pnpm --filter @app/browser dev\"",
+    "build": "pnpm --filter @app/common build && pnpm --filter @app/data build && pnpm --filter @app/api build && pnpm --filter @app/server build && pnpm --filter @app/browser build",
+    "typecheck": "pnpm --filter @app/common build && pnpm --filter @app/data build && pnpm --filter @app/tests --fail-if-no-match typecheck && pnpm -r --filter !@app/tests typecheck",
+    "lint": "eslint . --max-warnings 0 && pnpm --filter @app/tests --fail-if-no-match lint",
+    "format": "prettier --write . && pnpm --filter @app/tests --fail-if-no-match format",
+    "format:check": "prettier --check . && pnpm --filter @app/tests --fail-if-no-match format:check",
+    "test": "pnpm --filter @app/common build && pnpm --filter @app/data build && pnpm --filter @app/tests --fail-if-no-match test",
+    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm test && pnpm build",
+    "start": "pnpm --filter @app/server start",
+    "db:backup": "pnpm --filter @app/server db:backup",
+    "db:backup:production": "pnpm --filter @app/server db:backup:production"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "concurrently": "^9.2.1",
+    "eslint": "^10.12.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-vue": "^10.5.1",
+    "globals": "^17.13.0",
+    "prettier": "^3.6.2",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.46.1"
+  }
+}

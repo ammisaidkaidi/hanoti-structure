@@ -1,0 +1,45 @@
+{
+  "name": "@app/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Server-side ERP async function prototypes; no routes or database lifecycle",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./common": {
+      "types": "./dist/common/index.d.ts",
+      "import": "./dist/common/index.js"
+    },
+    "./erp": {
+      "types": "./dist/erp/index.d.ts",
+      "import": "./dist/erp/index.js"
+    },
+    "./erp/*": {
+      "types": "./dist/erp/*.d.ts",
+      "import": "./dist/erp/*.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "pnpm --filter @app/tests --fail-if-no-match test:api"
+  },
+  "dependencies": {
+    "@app/data": "workspace:*",
+    "@types/express": "5.0.6"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "typescript": "~5.9.3"
+  },
+  "engines": {
+    "node": "^20.19.0 || ^22.13.0 || >=24.11.0"
+  }
+}

@@ -1,0 +1,7 @@
+packages:
+  - 'packages/*'
+  - 'data'
+  - 'api'
+  - '../.test'
+onlyBuiltDependencies:
+  - esbuild

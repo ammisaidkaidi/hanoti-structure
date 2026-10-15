@@ -1,0 +1,230 @@
+[
+  {
+    "name": "auth._require_active_actor",
+    "signature": "auth._require_active_actor(uuid)",
+    "file": "007_authorization_routines.sql",
+    "exposed": false
+  },
+  {
+    "name": "auth._party_member",
+    "signature": "auth._party_member(uuid, text, uuid)",
+    "file": "007_authorization_routines.sql",
+    "exposed": false
+  },
+  {
+    "name": "auth.has_permission",
+    "signature": "auth.has_permission(uuid, text, text, uuid, text, uuid)",
+    "file": "007_authorization_routines.sql",
+    "exposed": true
+  },
+  {
+    "name": "auth._require_permission",
+    "signature": "auth._require_permission(uuid, text, text, uuid, text, uuid)",
+    "file": "007_authorization_routines.sql",
+    "exposed": false
+  },
+  {
+    "name": "settings._validate_context",
+    "signature": "settings._validate_context(uuid, jsonb)",
+    "file": "008_settings_routines.sql",
+    "exposed": false
+  },
+  {
+    "name": "settings._validate_value",
+    "signature": "settings._validate_value(settings.setting_definitions, jsonb, jsonb)",
+    "file": "008_settings_routines.sql",
+    "exposed": false
+  },
+  {
+    "name": "settings._resolve",
+    "signature": "settings._resolve(uuid, text, jsonb)",
+    "file": "008_settings_routines.sql",
+    "exposed": false
+  },
+  {
+    "name": "settings.resolve",
+    "signature": "settings.resolve(uuid, text, jsonb)",
+    "file": "008_settings_routines.sql",
+    "exposed": true
+  },
+  {
+    "name": "settings._boolean",
+    "signature": "settings._boolean(uuid, text, jsonb)",
+    "file": "008_settings_routines.sql",
+    "exposed": false
+  },
+  {
+    "name": "settings._number",
+    "signature": "settings._number(uuid, text, jsonb)",
+    "file": "008_settings_routines.sql",
+    "exposed": false
+  },
+  {
+    "name": "erp._require_write_context",
+    "signature": "erp._require_write_context(uuid, text)",
+    "file": "009_erp_routines.sql",
+    "exposed": false
+  },
+  {
+    "name": "erp._audit",
+    "signature": "erp._audit(uuid, text, text, uuid, jsonb)",
+    "file": "009_erp_routines.sql",
+    "exposed": false
+  },
+  {
+    "name": "erp._validate_quantity",
+    "signature": "erp._validate_quantity(uuid, numeric, jsonb)",
+    "file": "009_erp_routines.sql",
+    "exposed": false
+  },
+  {
+    "name": "erp.stock_balance",
+    "signature": "erp.stock_balance(uuid, uuid, uuid)",
+    "file": "009_erp_routines.sql",
+    "exposed": true
+  },
+  {
+    "name": "erp._check_stock_result",
+    "signature": "erp._check_stock_result(uuid, uuid, uuid, numeric, jsonb)",
+    "file": "009_erp_routines.sql",
+    "exposed": false
+  },
+  {
+    "name": "erp.adjust_stock",
+    "signature": "erp.adjust_stock(uuid, uuid, uuid, numeric, text, text)",
+    "file": "009_erp_routines.sql",
+    "exposed": true
+  },
+  {
+    "name": "erp.transfer_stock",
+    "signature": "erp.transfer_stock(uuid, uuid, uuid, uuid, numeric, text, text)",
+    "file": "009_erp_routines.sql",
+    "exposed": true
+  },
+  {
+    "name": "erp._save_order_draft",
+    "signature": "erp._save_order_draft(uuid, text, jsonb, text, uuid, timestamptz, bigint)",
+    "file": "009_erp_routines.sql",
+    "exposed": false
+  },
+  {
+    "name": "erp.save_sales_order_draft",
+    "signature": "erp.save_sales_order_draft(uuid, jsonb, text, uuid, timestamptz, bigint)",
+    "file": "009_erp_routines.sql",
+    "exposed": true
+  },
+  {
+    "name": "erp.save_purchase_order_draft",
+    "signature": "erp.save_purchase_order_draft(uuid, jsonb, text, uuid, timestamptz, bigint)",
+    "file": "009_erp_routines.sql",
+    "exposed": true
+  },
+  {
+    "name": "erp.order_totals",
+    "signature": "erp.order_totals(uuid, text, uuid)",
+    "file": "009_erp_routines.sql",
+    "exposed": true
+  },
+  {
+    "name": "erp.order_detail",
+    "signature": "erp.order_detail(uuid, text, uuid)",
+    "file": "009_erp_routines.sql",
+    "exposed": true
+  },
+  {
+    "name": "erp.sales_payment_balance",
+    "signature": "erp.sales_payment_balance(uuid, uuid)",
+    "file": "009_erp_routines.sql",
+    "exposed": true
+  },
+  {
+    "name": "auth._database_admin",
+    "signature": "auth._database_admin(oid)",
+    "file": "010_row_guards.sql",
+    "exposed": false
+  },
+  {
+    "name": "auth._row_metadata_guard",
+    "signature": "auth._row_metadata_guard()",
+    "file": "010_row_guards.sql",
+    "exposed": false
+  },
+  {
+    "name": "erp._set_edit_context",
+    "signature": "erp._set_edit_context(uuid, text, uuid, bigint, text, text)",
+    "file": "010_row_guards.sql",
+    "exposed": false
+  },
+  {
+    "name": "erp._restore_edit_context",
+    "signature": "erp._restore_edit_context(jsonb)",
+    "file": "010_row_guards.sql",
+    "exposed": false
+  },
+  {
+    "name": "erp._context_actor",
+    "signature": "erp._context_actor(text, uuid)",
+    "file": "010_row_guards.sql",
+    "exposed": false
+  },
+  {
+    "name": "erp._order_write_guard",
+    "signature": "erp._order_write_guard()",
+    "file": "010_row_guards.sql",
+    "exposed": false
+  },
+  {
+    "name": "erp._order_item_guard",
+    "signature": "erp._order_item_guard()",
+    "file": "010_row_guards.sql",
+    "exposed": false
+  },
+  {
+    "name": "erp._lock_edit_order",
+    "signature": "erp._lock_edit_order(text, uuid)",
+    "file": "011_order_edit_routines.sql",
+    "exposed": false
+  },
+  {
+    "name": "erp._assert_order_edit",
+    "signature": "erp._assert_order_edit(uuid, text, uuid, bigint)",
+    "file": "011_order_edit_routines.sql",
+    "exposed": false
+  },
+  {
+    "name": "erp.open_order_edit",
+    "signature": "erp.open_order_edit(uuid, text, uuid)",
+    "file": "011_order_edit_routines.sql",
+    "exposed": true
+  },
+  {
+    "name": "erp.renew_order_edit",
+    "signature": "erp.renew_order_edit(uuid, text, uuid, bigint)",
+    "file": "011_order_edit_routines.sql",
+    "exposed": true
+  },
+  {
+    "name": "erp.close_order_edit",
+    "signature": "erp.close_order_edit(uuid, text, uuid, bigint, text)",
+    "file": "011_order_edit_routines.sql",
+    "exposed": true
+  },
+  {
+    "name": "erp.force_close_order_edit",
+    "signature": "erp.force_close_order_edit(uuid, text, uuid, bigint, text)",
+    "file": "011_order_edit_routines.sql",
+    "exposed": true
+  },
+  {
+    "name": "erp.order_edit_status",
+    "signature": "erp.order_edit_status(uuid, text, uuid)",
+    "file": "011_order_edit_routines.sql",
+    "exposed": true
+  },
+  {
+    "name": "erp._product_full_name_guard",
+    "signature": "erp._product_full_name_guard()",
+    "file": "010_row_guards.sql",
+    "exposed": false
+  }
+]

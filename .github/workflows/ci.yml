@@ -1,0 +1,31 @@
+name: CI
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: hanoti
+    steps:
+      - uses: actions/checkout@v4
+      - name: Require sibling test sources
+        run: |
+          if [ ! -f ../.test/package.json ]; then
+            echo "::error::Missing sibling .test/package.json. Clone the complete hanoti-structure repository."
+            exit 1
+          fi
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: hanoti/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: hanoti/.nvmrc
+          cache: pnpm
+          cache-dependency-path: hanoti/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check

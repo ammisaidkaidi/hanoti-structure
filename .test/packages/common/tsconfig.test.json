@@ -1,0 +1,8 @@
+{
+  "extends": "../../../hanoti/packages/common/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "../../..",
+    "noEmit": true
+  },
+  "include": ["../../../hanoti/packages/common/src/**/*.ts", "./*.ts"]
+}

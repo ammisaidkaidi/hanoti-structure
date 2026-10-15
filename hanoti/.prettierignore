@@ -1,0 +1,16 @@
+node_modules
+dist
+coverage
+pnpm-lock.yaml
+*.dump
+*.dump.partial
+**/.backup.lock/**
+
+# Third-party skill instructions: keep installed content unchanged.
+.agents/
+.claude/skills/
+agent/skills/
+data/skills/
+
+# Historical reference snapshots, not active source
+docs/architecture/baseline/

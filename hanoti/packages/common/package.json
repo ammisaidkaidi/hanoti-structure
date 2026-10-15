@@ -1,0 +1,38 @@
+{
+  "name": "@app/common",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./negotiation/client": {
+      "types": "./dist/negotiation/client.d.ts",
+      "import": "./dist/negotiation/client.js"
+    },
+    "./negotiation/server": {
+      "types": "./dist/negotiation/server.d.ts",
+      "import": "./dist/negotiation/server.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch --preserveWatchOutput",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "pnpm --filter @app/tests --fail-if-no-match test:common"
+  },
+  "dependencies": {
+    "automategraph": "1.5.2",
+    "http-negotiation-protocol": "1.10.0",
+    "smart-hybrid-search": "1.0.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3"
+  }
+}

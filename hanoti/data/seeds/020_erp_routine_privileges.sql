@@ -1,0 +1,113 @@
+-- OPTIONAL UNAPPLIED PRIVILEGE TEMPLATE. Review ERP_ROUTINES.md first.
+-- Run as a provisioning administrator ONLY after 001..011 and before granting backend access.
+-- Fails if roles already exist: review existing privileges rather than silently inheriting them.
+-- These are PostgreSQL roles, NOT business roles in auth.roles. None can log in directly.
+BEGIN;
+CREATE ROLE hanouti_routine_owner NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
+CREATE ROLE hanouti_data_admin NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
+CREATE ROLE hanouti_backend NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
+GRANT USAGE, CREATE ON SCHEMA auth, erp, app, settings TO hanouti_routine_owner;
+GRANT USAGE ON SCHEMA auth, erp, settings TO hanouti_backend;
+GRANT SELECT (id,status) ON auth.users TO hanouti_routine_owner;
+GRANT SELECT ON auth.permissions, auth.user_roles, auth.role_permissions, auth.subject_permissions, auth.party_memberships TO hanouti_routine_owner;
+GRANT SELECT ON settings.setting_definitions, settings.gsettings, settings.settings TO hanouti_routine_owner;
+GRANT SELECT (id,name,is_active) ON erp.customers, erp.suppliers TO hanouti_routine_owner;
+GRANT SELECT (id,sku,name,full_name,unit_code,sale_price,currency_code,kind,is_active) ON erp.products TO hanouti_routine_owner;
+GRANT SELECT (id,name) ON erp.brands TO hanouti_routine_owner;
+GRANT SELECT ON erp.warehouses, erp.sales_orders, erp.sales_order_items, erp.purchase_orders, erp.purchase_order_items, erp.payments, erp.stock_movements TO hanouti_routine_owner;
+-- A column UPDATE privilege is needed for SELECT ... FOR UPDATE / SHARE; no runtime table grants.
+GRANT UPDATE (id) ON erp.products, erp.warehouses TO hanouti_routine_owner;
+GRANT INSERT, UPDATE ON erp.sales_orders, erp.purchase_orders TO hanouti_routine_owner;
+GRANT INSERT, DELETE ON erp.sales_order_items, erp.purchase_order_items TO hanouti_routine_owner;
+GRANT INSERT ON erp.stock_movements, app.audit_events TO hanouti_routine_owner;
+ALTER FUNCTION auth._require_active_actor(uuid) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION auth._party_member(uuid, text, uuid) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION auth.has_permission(uuid, text, text, uuid, text, uuid) OWNER TO hanouti_routine_owner;
+GRANT EXECUTE ON FUNCTION auth.has_permission(uuid, text, text, uuid, text, uuid) TO hanouti_backend;
+ALTER FUNCTION auth._require_permission(uuid, text, text, uuid, text, uuid) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION settings._validate_context(uuid, jsonb) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION settings._validate_value(settings.setting_definitions, jsonb, jsonb) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION settings._resolve(uuid, text, jsonb) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION settings.resolve(uuid, text, jsonb) OWNER TO hanouti_routine_owner;
+GRANT EXECUTE ON FUNCTION settings.resolve(uuid, text, jsonb) TO hanouti_backend;
+ALTER FUNCTION settings._boolean(uuid, text, jsonb) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION settings._number(uuid, text, jsonb) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION erp._require_write_context(uuid, text) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION erp._audit(uuid, text, text, uuid, jsonb) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION erp._validate_quantity(uuid, numeric, jsonb) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION erp.stock_balance(uuid, uuid, uuid) OWNER TO hanouti_routine_owner;
+GRANT EXECUTE ON FUNCTION erp.stock_balance(uuid, uuid, uuid) TO hanouti_backend;
+ALTER FUNCTION erp._check_stock_result(uuid, uuid, uuid, numeric, jsonb) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION erp.adjust_stock(uuid, uuid, uuid, numeric, text, text) OWNER TO hanouti_routine_owner;
+GRANT EXECUTE ON FUNCTION erp.adjust_stock(uuid, uuid, uuid, numeric, text, text) TO hanouti_backend;
+ALTER FUNCTION erp.transfer_stock(uuid, uuid, uuid, uuid, numeric, text, text) OWNER TO hanouti_routine_owner;
+GRANT EXECUTE ON FUNCTION erp.transfer_stock(uuid, uuid, uuid, uuid, numeric, text, text) TO hanouti_backend;
+ALTER FUNCTION erp._save_order_draft(uuid, text, jsonb, text, uuid, timestamptz, bigint) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION erp.save_sales_order_draft(uuid, jsonb, text, uuid, timestamptz, bigint) OWNER TO hanouti_routine_owner;
+GRANT EXECUTE ON FUNCTION erp.save_sales_order_draft(uuid, jsonb, text, uuid, timestamptz, bigint) TO hanouti_backend;
+ALTER FUNCTION erp.save_purchase_order_draft(uuid, jsonb, text, uuid, timestamptz, bigint) OWNER TO hanouti_routine_owner;
+GRANT EXECUTE ON FUNCTION erp.save_purchase_order_draft(uuid, jsonb, text, uuid, timestamptz, bigint) TO hanouti_backend;
+ALTER FUNCTION erp.order_totals(uuid, text, uuid) OWNER TO hanouti_routine_owner;
+GRANT EXECUTE ON FUNCTION erp.order_totals(uuid, text, uuid) TO hanouti_backend;
+ALTER FUNCTION erp.order_detail(uuid, text, uuid) OWNER TO hanouti_routine_owner;
+GRANT EXECUTE ON FUNCTION erp.order_detail(uuid, text, uuid) TO hanouti_backend;
+ALTER FUNCTION erp.sales_payment_balance(uuid, uuid) OWNER TO hanouti_routine_owner;
+GRANT EXECUTE ON FUNCTION erp.sales_payment_balance(uuid, uuid) TO hanouti_backend;
+ALTER FUNCTION auth._database_admin(oid) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION auth._row_metadata_guard() OWNER TO hanouti_routine_owner;
+ALTER FUNCTION erp._set_edit_context(uuid, text, uuid, bigint, text, text) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION erp._restore_edit_context(jsonb) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION erp._context_actor(text, uuid) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION erp._order_write_guard() OWNER TO hanouti_routine_owner;
+ALTER FUNCTION erp._order_item_guard() OWNER TO hanouti_routine_owner;
+ALTER FUNCTION erp._lock_edit_order(text, uuid) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION erp._assert_order_edit(uuid, text, uuid, bigint) OWNER TO hanouti_routine_owner;
+ALTER FUNCTION erp.open_order_edit(uuid, text, uuid) OWNER TO hanouti_routine_owner;
+GRANT EXECUTE ON FUNCTION erp.open_order_edit(uuid, text, uuid) TO hanouti_backend;
+ALTER FUNCTION erp.renew_order_edit(uuid, text, uuid, bigint) OWNER TO hanouti_routine_owner;
+GRANT EXECUTE ON FUNCTION erp.renew_order_edit(uuid, text, uuid, bigint) TO hanouti_backend;
+ALTER FUNCTION erp.close_order_edit(uuid, text, uuid, bigint, text) OWNER TO hanouti_routine_owner;
+GRANT EXECUTE ON FUNCTION erp.close_order_edit(uuid, text, uuid, bigint, text) TO hanouti_backend;
+ALTER FUNCTION erp.force_close_order_edit(uuid, text, uuid, bigint, text) OWNER TO hanouti_routine_owner;
+GRANT EXECUTE ON FUNCTION erp.force_close_order_edit(uuid, text, uuid, bigint, text) TO hanouti_backend;
+ALTER FUNCTION erp.order_edit_status(uuid, text, uuid) OWNER TO hanouti_routine_owner;
+GRANT EXECUTE ON FUNCTION erp.order_edit_status(uuid, text, uuid) TO hanouti_backend;
+ALTER FUNCTION erp._product_full_name_guard() OWNER TO hanouti_routine_owner;
+REVOKE CREATE ON SCHEMA auth, erp, app, settings FROM hanouti_routine_owner;
+-- The application login must be a NON-superuser with NO table rights or owner membership.
+-- After auditing all inherited grants, an operator may grant hanouti_backend to that login.
+-- Do not grant hanouti_routine_owner to the backend or end users.
+-- Administrative metadata rights only; never grant this group to the backend login.
+GRANT USAGE ON SCHEMA auth,erp,app,settings TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON auth.users TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON auth.roles TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON auth.permissions TO hanouti_data_admin;
+GRANT SELECT (user_id,role_id,frozen,updated_at), UPDATE (frozen) ON auth.user_roles TO hanouti_data_admin;
+GRANT SELECT (role_id,permission_id,frozen,updated_at), UPDATE (frozen) ON auth.role_permissions TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON auth.sessions TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON auth.password_reset_tokens TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON auth.email_verification_tokens TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON erp.categories TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON erp.brands TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON erp.products TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON erp.customers TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON erp.suppliers TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON erp.warehouses TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON erp.sales_orders TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON erp.sales_order_items TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON erp.purchase_orders TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON erp.purchase_order_items TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON erp.payments TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON erp.stock_movements TO hanouti_data_admin;
+GRANT SELECT (auth_user_id,frozen,updated_at), UPDATE (frozen) ON app.user_preferences TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON app.files TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON app.notifications TO hanouti_data_admin;
+GRANT SELECT (key,frozen,updated_at), UPDATE (frozen) ON app.feature_flags TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON app.audit_events TO hanouti_data_admin;
+GRANT SELECT (key,frozen,updated_at), UPDATE (frozen) ON settings.setting_definitions TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON settings.gsettings TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON settings.settings TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON auth.party_memberships TO hanouti_data_admin;
+GRANT SELECT (id,frozen,updated_at), UPDATE (frozen) ON auth.subject_permissions TO hanouti_data_admin;
+
+COMMIT;

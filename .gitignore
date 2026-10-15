@@ -1,0 +1,35 @@
+# Track only the explicitly selected repository contents at this parent root.
+/*
+!/.gitignore
+!/README.md
+!/.github/
+!/hanoti/
+!/.test/
+
+# Generated dependencies, builds, local tooling and diagnostics.
+**/node_modules/
+**/dist/
+**/build/
+**/coverage/
+**/.cache/
+**/.tmp/
+**/__pycache__/
+**/*.tsbuildinfo
+**/*.log
+.test/logs/
+.test/artifacts/
+
+# Credentials and private database output must never be committed.
+**/.env
+**/.env.*
+!**/.env.example
+**/*.env
+**/.git-credentials
+**/.netrc
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/*.dump
+**/*.dump.partial
+**/.backup.lock/
